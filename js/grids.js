@@ -1,25 +1,22 @@
 var Grids = (function() {
 
-	var _canvas = null;
-	var _context = null;
-
 	var _grid = null;
 
-	var _draw = function(context) {
-		drawQuadGrid(_grid, 50, 50);
+	var draw = function(context) {
+		drawQuadGrid(context, _grid, 50, 50);
 	}
 
-	var drawQuad = function (left, top, width, height, color) {
+	var drawQuad = function (context, left, top, width, height, color) {
         color = typeof color !== 'undefined' ? color : "#FFFFFF";
-        _context.fillStyle=color;
-        _context.fillRect(left, top, width, height);
+        context.fillStyle=color;
+        context.fillRect(left, top, width, height);
     }
 
-	var drawQuadGrid = function(grid, width, height) {
+	var drawQuadGrid = function(context, grid, width, height) {
         for (xindex = 0; xindex < grid.length; xindex++) {
             var col = grid[xindex];
             for(yindex = 0; yindex < col.length; yindex++){
-                drawQuad(width*xindex, height*yindex, width, height, col[yindex]);
+                drawQuad(context, width*xindex, height*yindex, width, height, col[yindex]);
             }
         }
     }
@@ -45,26 +42,31 @@ var Grids = (function() {
 
 
     var init = function(canvas) {
-    	_canvas = canvas;
-    	_context = _canvas.context;
-
     	_grid = randomColorGrid(100,100);
-    	_canvas.draw = _draw(_context);
     }
+
+
+    var attach = function(canvas) {
+    	canvas.draw = draw;
+    }
+
 
  	return {
         "init"			: init,
+        "attach"		: attach,
 
+        "draw"			: draw,
         "drawQuad"      : drawQuad,
         "drawQuadGrid"  : drawQuadGrid
     }
 
 })();
 
-document.addEventListener(
-	    'DOMContentLoaded', 
-	    function() {
-	        Grids.init(Canvas);
-	    }, 
-	    false
-	);
+// document.addEventListener(
+// 	    'DOMContentLoaded', 
+// 	    function() {
+// 	        Grids.init();
+// 	        Grids.attach(Canvas);
+// 	    }, 
+// 	    false
+// 	);
