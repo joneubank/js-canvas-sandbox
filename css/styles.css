@@ -5,8 +5,9 @@
    after all.
    ---------------------------------------------------------*/
     body {
-   
+      background : #000;
     }
+
     /* Default link styling */
     a:link { color:#0271fb; }
     a:visited { color:#bd02fb; }
@@ -25,7 +26,7 @@
 
     #canvas {
       display: block;
-      background : #359;
+      background : #000;
       width:100%;
       height:100%;
     }
@@ -64,5 +65,7 @@
         overflow:hidden;
     }
 
-    figure img { border:1px solid #000; }
+    figure img { 
+      border:1px solid #000; 
+    }
 }
