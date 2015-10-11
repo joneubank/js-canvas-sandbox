@@ -18,7 +18,7 @@ Important functionality provided:
 * resize()
 Updates the Dimensions of the canvas element to take up the entire dimensions of its parent element
 
-####Sample
+#### Sample
 An example for setting up a fullscreen canvas using this module, then attaching the Grids module that will draw to it:
 ```
 <canvas id="canvas"></canvas>
@@ -50,16 +50,19 @@ The current setup generates completely random colours and only allows control ov
 
 The sample code for Canvas.js shows a demo initialiation of the Grids module.
 
-#### Methods.js
+#### Methods
 * init(tileSize, gridSize)
+
 tileSize - size in pixels of each grid square to be drawn
 gridSize - if left blank, this will be calculated based on the canvas size.
 
 * regenerate(gridWidth, gridHeight)
+
 Geneartes a completely new Grid. Does not immediately redraw - consider calling Canvas.resize()
 If either parameter is left blank it will be calculated based on the canvas current dimensions
 
 * setTileSize(size)
+
 Sets the size that tiles will be drawn at. Does not immediately redraw - consider calling Canvas.resize()
 
 ## HUD
