@@ -5,7 +5,6 @@
    after all.
    ---------------------------------------------------------*/
 
-    /* Default link styling */
     a:link, a:visited { color:#07f; }
     a:hover, a:focus { color:#f07; }
     a:active { color:#7f0; }
