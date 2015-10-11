@@ -65,7 +65,7 @@ Sets the size that tiles will be drawn at. Does not immediately redraw - conside
 ## HUD
 Styles are in place to draw a semi transparent fixed position layer over the canvas. 
 
-The HTML to include the HUD follows the following format:
+To include HUD panels, add the following HTML above the canvas code:
 ```
 <div id="hud">
 	<div class="top-left">
