@@ -102,7 +102,7 @@ var Grids = (function() {
 // document.addEventListener(
 // 	    'DOMContentLoaded', 
 // 	    function() {
-// 	        Grids.init();
+// 	        Grids.init(125);
 // 	        Grids.attach(Canvas);
 // 	    }, 
 // 	    false
