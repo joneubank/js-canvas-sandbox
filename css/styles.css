@@ -46,8 +46,8 @@
       max-height: 40%;
       max-width: 40%;
 
-      overflow-y: scroll;
-      
+      overflow-y: auto;
+
       /* IE 8 */
       -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
 
@@ -87,6 +87,14 @@
     #hud .bottom-right{
       bottom: 0px;
       right: 0px;
+    }
+
+    #hud form input {
+      margin-top:0.5em;
+    }
+
+    #hud form label {
+      font-weight: bold;
     }
     
 /* ---------------------------------------------------------

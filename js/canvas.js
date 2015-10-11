@@ -18,6 +18,9 @@ var Canvas = (function() {
         document.getElementById("hud").getElementsByClass("")
     }
 
+    var getElement = function() {
+        return _canvas;
+    }
 
     /* Init Code */
     var init = function(id) {
@@ -38,7 +41,9 @@ var Canvas = (function() {
     return {
         "init"          : init,
         "resize"        : resize,
-        "draw"          : draw
+        "draw"          : draw,
+
+        "get"           : getElement
     }
 
 })();

@@ -1,5 +1,7 @@
 var Grids = (function() {
 
+    var _canvas = null;
+
 	var _grid = null;
     var _tileSize = 10;
 
@@ -19,6 +21,35 @@ var Grids = (function() {
             for(yindex = 0; yindex < col.length; yindex++){
                 drawQuad(context, width*xindex, height*yindex, width, height, col[yindex]);
             }
+        }
+    }
+
+    var regenerate = function(gridWidth, gridHeight) {
+        gridWidth = typeof gridWidth !== 'undefined' ? gridWidth : calculateGridWidth();
+        gridHeight = typeof gridHeight !== 'undefined' ? gridHeight : calculateGridHeight();
+
+        _grid = randomColorGrid(gridWidth, gridHeight);
+    }
+
+    var calculateGridWidth = function() {
+        if (_canvas) {
+            return ((_canvas.get().width / _tileSize)|0)+1;
+        } else {
+            return 100;
+        }
+    }
+
+    var calculateGridHeight = function() {
+        if(_canvas) {
+            return ((_canvas.get().height / _tileSize)|0)+1;
+        } else {
+            return 100;
+        }
+    }
+    
+    var setTileSize = function(size) {
+        if(size) {
+            _tileSize = size;
         }
     }
 
@@ -43,14 +74,14 @@ var Grids = (function() {
 
 
     var init = function(tileSize, gridSize) {
-        gridSize = typeof gridSize !== 'undefined' ? gridSize : 50;
-        _tileSize = tileSize;
-    	_grid = randomColorGrid(gridSize,gridSize);
+        this.setTileSize(tileSize);
+    	this.regenerate(gridSize);
     }
 
 
     var attach = function(canvas) {
     	canvas.draw = draw;
+        _canvas = canvas;
     }
 
 
@@ -60,7 +91,10 @@ var Grids = (function() {
 
         "draw"			: draw,
         "drawQuad"      : drawQuad,
-        "drawQuadGrid"  : drawQuadGrid
+        "drawQuadGrid"  : drawQuadGrid,
+
+        "regenerate"    : regenerate,
+        "setTileSize"   : setTileSize
     }
 
 })();
