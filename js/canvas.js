@@ -8,10 +8,18 @@ var Canvas = (function() {
 
     }
 
-    var resize = function() {
-        _canvas.width = window.innerWidth;
-        _canvas.height = window.innerHeight;
+    var redraw = function() {
         _this.draw(_context);
+    }
+
+    var resize = function() {
+        _canvas.width = _canvas.parentElement.offsetWidth;
+        _canvas.height = _canvas.parentElement.offsetHeight;
+        _this.redraw();
+    }
+
+    var setDrawer = function(drawMethod) {
+        _this.draw = drawMethod;
     }
 
     var _setupHud = function() {
@@ -42,6 +50,7 @@ var Canvas = (function() {
         "init"          : init,
         "resize"        : resize,
         "draw"          : draw,
+        "redraw"        : redraw,
 
         "get"           : getElement
     }

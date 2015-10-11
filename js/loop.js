@@ -4,16 +4,57 @@ var Loop = (function() {
     var _pause = false;
     var _canvas = null;
 
-    var _fps = 30;
+    var _loops = 0;
+    var _updatesPerSecond = 30;
+    var _stepInterval = 1000 / _updatesPerSecond;
+    var _drawsThisStep = 0;
+    var _fpsRegister = [];
+    var _fpsRegisterMaxLength = 1000;
+
+    var _nextStepTime = (new Date).getTime() + _stepInterval;
+    var updateNextStep = function() {
+        _nextStepTime = (new Date).getTime() + _stepInterval;
+    }
+
+    /*
+    * Loop state variables and updates
+    */
+    var _randColor = Color.random();
+    var update = function() {
+        _randColor = Color.random();
+    }
 
     var main = function() {
-        while(!_exit) {
-            if(!_pause) {
+        if(!_pause) {
 
+            //execute update at set interval
+            var timeNow = (new Date).getTime();
+            if(timeNow >= _nextStepTime) {
+                
+                loopTime = timeNow - _nextStepTime;
+                update();
 
-
+                //update time to run loop at next
+                updateNextStep();
+                if (_fpsRegister.length > _fpsRegisterMaxLength) {
+                    _fpsRegister.shift(1);
+                }
+                _fpsRegister.push(_drawsThisStep);
+                _drawsThisStep = 0;
             }
+
         }
+
+        //draw as often as possible
+        _canvas.redraw(); 
+        _drawsThisStep = _drawsThisStep + 1;
+    }
+
+    var draw = function(context) {
+        if(Color) {
+            context.fillStyle = _randColor;
+        }
+        context.fillRect(10, 10, 500, 500);
     }
 
     /*
@@ -43,7 +84,7 @@ var Loop = (function() {
     * unpasue()
     * Sets the Pause property to false so that the main loop will run
     */
-    var unpase = function() {
+    var unpause = function() {
         _pause = false;
     }
 
@@ -60,18 +101,34 @@ var Loop = (function() {
         canvas.draw = draw;
     }
 
-    var init = function(fps = 30) {
-        _fps = fps;
+    var init = function(updatesPerSecond) {
+        updatesPerSecond = updatesPerSecond !== undefined ? updatesPerSecond : 30;
+        _updatesPerSecond = updatesPerSecond;
+        _stepInterval = 1000 / _updatesPerSecond;
+        updateNextStep();
+
+        setInterval(main,0);
+    }
+
+    var getFrameRate = function() {
+        sum = 0;
+        for(i = 0; i < _fpsRegister.length; i++) {
+            sum = sum + _fpsRegister[i];
+        }
+        return sum/_fpsRegister.length*_updatesPerSecond;
     }
 
     return {
         "init"          : init,
+        "draw"          : draw,
+        "attach"        : attach,
 
         "start"         : start,
         "stop"          : stop,
         "pause"         : pause,
         "unpase"        : unpause,
-        "togglePause"   : togglePause
+        "togglePause"   : togglePause,
+        "getFrameRate"  : getFrameRate
     }
 
 })();

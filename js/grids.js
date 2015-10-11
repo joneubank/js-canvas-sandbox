@@ -12,7 +12,7 @@ var Grids = (function() {
 	}
 
 	var drawQuad = function (context, left, top, width, height, color) {
-        color = typeof color !== 'undefined' ? color : "#ffffff";
+        color = typeof color !== undefined ? color : "#ffffff";
         context.fillStyle=color;
         context.fillRect(left, top, width, height);
     }
@@ -90,10 +90,6 @@ var Grids = (function() {
  	return {
         "init"			: init,
         "attach"		: attach,
-
-        "draw"			: draw,
-        "drawQuad"      : drawQuad,
-        "drawQuadGrid"  : drawQuadGrid,
 
         "regenerate"    : regenerate,
         "setTileSize"   : setTileSize

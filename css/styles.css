@@ -14,11 +14,19 @@
    Sandbox Canvas Styles
    @author joneubank
    ---------------------------------------------------------*/
+    html {
+      height: 100%;
+    }
+
     body {
+      height:100%;
       background: #000;
     }
 
     #canvas {
+      position: absolute;
+      top: 0px;
+      left: 0px;
       display: block;
       background : #000;
       width:100%;
