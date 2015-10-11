@@ -14,6 +14,10 @@ var Canvas = (function() {
         _this.draw(_context);
     }
 
+    var _setupHud = function() {
+        document.getElementById("hud").getElementsByClass("")
+    }
+
 
     /* Init Code */
     var init = function(id) {
@@ -27,6 +31,8 @@ var Canvas = (function() {
             resize();
         }, false);
         _this.resize();
+
+        // _setupHud();
     }
     
     return {

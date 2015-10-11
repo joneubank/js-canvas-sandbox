@@ -1,13 +1,14 @@
 var Grids = (function() {
 
 	var _grid = null;
+    var _tileSize = 10;
 
 	var draw = function(context) {
-		drawQuadGrid(context, _grid, 50, 50);
+		drawQuadGrid(context, _grid, _tileSize, _tileSize);
 	}
 
 	var drawQuad = function (context, left, top, width, height, color) {
-        color = typeof color !== 'undefined' ? color : "#FFFFFF";
+        color = typeof color !== 'undefined' ? color : "#ffffff";
         context.fillStyle=color;
         context.fillRect(left, top, width, height);
     }
@@ -23,7 +24,7 @@ var Grids = (function() {
 
 
     var randColor = function () {
-        return "#"+((1<<24)*Math.random()|0).toString(16);
+        return "#"+("000000" + ((1<<24)*Math.random()|0).toString(16)).substr(-6);
     }
 
     var randomColorGrid = function(width, height) {
@@ -41,8 +42,10 @@ var Grids = (function() {
     }
 
 
-    var init = function(canvas) {
-    	_grid = randomColorGrid(100,100);
+    var init = function(tileSize, gridSize) {
+        gridSize = typeof gridSize !== 'undefined' ? gridSize : 50;
+        _tileSize = tileSize;
+    	_grid = randomColorGrid(gridSize,gridSize);
     }
 
 
