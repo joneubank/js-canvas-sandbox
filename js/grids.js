@@ -6,7 +6,9 @@ var Grids = (function() {
     var _tileSize = 10;
 
 	var draw = function(context) {
-		drawQuadGrid(context, _grid, _tileSize, _tileSize);
+        if(_grid) {
+		  drawQuadGrid(context, _grid, _tileSize, _tileSize);
+        }
 	}
 
 	var drawQuad = function (context, left, top, width, height, color) {
