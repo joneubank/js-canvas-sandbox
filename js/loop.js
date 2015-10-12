@@ -1,173 +1,111 @@
-var Loop = (function() {
+var Loop = function(canvas) {
+    var loop = {};
 
-    _this = null;
-
-    var _exit = false;
-    var _pause = false;
-    var _canvas = null;
+    loop._exit = false;
+    loop._pause = false;
 
     //loop handling
-    var _loops = 0;
-    var _updatesPerSecond = 30;
-    var _stepInterval = 1000 / _updatesPerSecond;
-    var _drawsThisStep = 0;
-    var _fpsRegister = [];
-    var _fpsRegisterMaxLength = 1000;
+    loop._count = 0;
+    loop._stepInterval = 1000 / 30;
+    loop._drawsThisStep = 0;
+    loop._fpsRegister = [];
+    loop._fpsRegisterMaxLength = 1000;
 
-    var _data = {};
-
-    var _nextStepTime = (new Date).getTime() + _stepInterval;
-    var updateNextStep = function() {
-        _nextStepTime = (new Date).getTime() + _stepInterval;
+    loop.updateNextStep = function() {
+        loop._nextStepTime = (new Date).getTime() + loop._stepInterval;
     }
-
+    
     /*
-    * Loop state variables and updates
+    * _update(canvas) has the default functionality
+    * update(canvas) is blank by default and should be overwritten by whatever logic the user wants the loop to execute
     */
-    var _randColor = Color.random();
-    var update = function(data) {
-        
+    loop.update = function(canvas) { }
+    loop._update = function(canvas) {
+        loop._count = loop._count + 1;
+        loop.update(canvas);
     }
 
-    var main = function() {
-        if(!_pause) {
+    loop.main = function() {
+        if(!loop._pause) {
 
             //execute update at set interval
             var timeNow = (new Date).getTime();
-            if(timeNow >= _nextStepTime) {
+            if(timeNow >= loop._nextStepTime) {
                 
-                loopTime = timeNow - _nextStepTime;
-                _this.update(_data);
+                loopTime = timeNow - loop._nextStepTime;
+                loop._update(canvas);
 
                 //update time to run loop at next
-                updateNextStep();
+                loop.updateNextStep();
 
-                if (_fpsRegister.length > _fpsRegisterMaxLength) {
-                    _fpsRegister.shift(1);
+                if (loop._fpsRegister.length > loop._fpsRegisterMaxLength) {
+                    loop._fpsRegister.shift(1);
                 }
-                _fpsRegister.push(_drawsThisStep);
-                _drawsThisStep = 0;
+                loop._fpsRegister.push(loop._drawsThisStep);
+                loop._drawsThisStep = 0;
             }
         }
 
         //draw as often as possible
-        _canvas.redraw(); 
-        _drawsThisStep = _drawsThisStep + 1;
-    }
+        canvas.redraw();
 
-    var draw = function(context) {
-        if(_canvas) {
-            var width = _canvas.get().width;
-            var height = _canvas.get().height;
-            context.clearRect(0,0,width,height);
-
-            _this.render(context, _data);
-                
-            // context.fillRect(0, 0, width, height);
-        }
-    }
-
-    var render = function(context, data) {
-
+        loop._drawsThisStep = loop._drawsThisStep + 1;
     }
 
     /*
     * Runs the main loop until told to stop
     */
-    var start = function() {
-        this.main();
+    loop.start = function() {
+        setInterval(loop.main,0);
     }
 
     /*
     * stop()
     * Sets a property that indicates to the main loop to exit
     */
-    var stop = function() {
-        _exit = true;
+    loop.stop = function() {
+        loop._exit = true;
     }
 
     /*
     * pause()
     * Sets a property that indicates to the main loop to not execute
     */
-    var pause = function() {
-        _pause = true;
+    loop.pause = function() {
+        loop._pause = true;
     }
 
     /*
     * unpasue()
     * Sets the Pause property to false so that the main loop will run
     */
-    var unpause = function() {
-        _pause = false;
+    loop.unpause = function() {
+        loop._pause = false;
     }
 
     /*
     * togglePause()
     * Sets _pause to the opposite of its current state, pausing a running loop and unpausing a paused loop
     */
-    var togglePause = function() {
+    loop.togglePause = function() {
         _pause = !_pause;
     }
 
-    var attach = function(canvas) {
-        _canvas = canvas;
-        canvas.draw = draw;
 
-        updateCanvasData();
+    loop.updateRate = function()
+    {
+        return 1000 / canvas.loop._stepInterval;
     }
 
-    var updateCanvasData = function() {
-        if(_canvas) {
-            _data.canvas = {};
-            _data.canvas.width = _canvas.get().width;
-            _data.canvas.height = _canvas.get().height;
-        }
-    }
-
-    var init = function(updatesPerSecond, updateFunction, renderFunction) {
-        _this = this;
-
-        updatesPerSecond = updatesPerSecond !== undefined ? updatesPerSecond : 30;
-        updateFunction = updateFunction !== undefined ? updateFunction : function(){};
-        renderFunction = renderFunction !== undefined ? renderFunction : function(){};
-
-        _this.render = renderFunction;
-        _this.update = updateFunction;
-
-        _updatesPerSecond = updatesPerSecond;
-        _stepInterval = 1000 / _updatesPerSecond;
-        update(_data);
-        updateNextStep();
-
-        setInterval(main,0);
-    }
-
-    var getFrameRate = function() {
+    loop.fps = function() {
         sum = 0;
-        for(i = 0; i < _fpsRegister.length; i++) {
-            sum = sum + _fpsRegister[i];
+        for(i = 0; i < loop._fpsRegister.length; i++) {
+            sum = sum + loop._fpsRegister[i];
         }
-        return sum/_fpsRegister.length*_updatesPerSecond;
+        return sum/loop._fpsRegister.length*loop.updateRate();
     }
 
-    var setUpdateRate = function(rate) {
-        _updatesPerSecond = rate;
-        _stepInterval = 1000 / _updatesPerSecond;
-    }
-
-    return {
-        "init"          : init,
-        "draw"          : draw,
-        "attach"        : attach,
-
-        "start"         : start,
-        "stop"          : stop,
-        "pause"         : pause,
-        "unpase"        : unpause,
-        "togglePause"   : togglePause,
-        "getFrameRate"  : getFrameRate,
-        "setUpdateRate" : setUpdateRate
-    }
-
-})();
+    loop.updateNextStep();
+    canvas.loop = loop;
+    return canvas;
+};

@@ -7,7 +7,7 @@ canvas.draw = canvas.grids.draw;
 var Grids = function(canvas) {
     var grids = {};
 
-	grids._data = null;
+	grids._data = [];
     grids._tileSize = 100;
 
 	grids.draw = function(context) {

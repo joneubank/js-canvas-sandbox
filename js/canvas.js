@@ -3,6 +3,7 @@ var Canvas = function(canvasId, resizeListenerOn) {
 
     var canvas = {};
 
+    canvas.data = {};
     canvas._elem  = null;
     canvas._context = null;
 
