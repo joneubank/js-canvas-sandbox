@@ -23,21 +23,12 @@ var Canvas = function(canvasId, resizeListenerOn) {
         canvas.redraw();
     }
 
-    //TODO: Remove this since the draw method will be publicly accessible now
-    canvas.setDrawer = function(drawMethod) {
-        canvas.draw = drawMethod;
-    }
 
     //TODO: hud interactions (keystrokes to show/hide, make collapsable)
     canvas._setupHud = function() {
         // document.getElementById("hud").getElementsByClass("");
     }
 
-
-    //TODO: Remove this since the canvas member will be publicly accessible now
-    canvas.getElement = function() {
-        return canvas._elem;
-    }
 
     /***************
         Init Code 
