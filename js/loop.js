@@ -1,15 +1,20 @@
 var Loop = (function() {
 
+    _this = null;
+
     var _exit = false;
     var _pause = false;
     var _canvas = null;
 
+    //loop handling
     var _loops = 0;
     var _updatesPerSecond = 30;
     var _stepInterval = 1000 / _updatesPerSecond;
     var _drawsThisStep = 0;
     var _fpsRegister = [];
     var _fpsRegisterMaxLength = 1000;
+
+    var _data = {};
 
     var _nextStepTime = (new Date).getTime() + _stepInterval;
     var updateNextStep = function() {
@@ -20,8 +25,8 @@ var Loop = (function() {
     * Loop state variables and updates
     */
     var _randColor = Color.random();
-    var update = function() {
-        _randColor = Color.random();
+    var update = function(data) {
+        
     }
 
     var main = function() {
@@ -32,17 +37,17 @@ var Loop = (function() {
             if(timeNow >= _nextStepTime) {
                 
                 loopTime = timeNow - _nextStepTime;
-                update();
+                _this.update(_data);
 
                 //update time to run loop at next
                 updateNextStep();
+
                 if (_fpsRegister.length > _fpsRegisterMaxLength) {
                     _fpsRegister.shift(1);
                 }
                 _fpsRegister.push(_drawsThisStep);
                 _drawsThisStep = 0;
             }
-
         }
 
         //draw as often as possible
@@ -51,10 +56,19 @@ var Loop = (function() {
     }
 
     var draw = function(context) {
-        if(Color) {
-            context.fillStyle = _randColor;
+        if(_canvas) {
+            var width = _canvas.get().width;
+            var height = _canvas.get().height;
+            context.clearRect(0,0,width,height);
+
+            _this.render(context, _data);
+                
+            // context.fillRect(0, 0, width, height);
         }
-        context.fillRect(10, 10, 500, 500);
+    }
+
+    var render = function(context, data) {
+
     }
 
     /*
@@ -99,12 +113,31 @@ var Loop = (function() {
     var attach = function(canvas) {
         _canvas = canvas;
         canvas.draw = draw;
+
+        updateCanvasData();
     }
 
-    var init = function(updatesPerSecond) {
+    var updateCanvasData = function() {
+        if(_canvas) {
+            _data.canvas = {};
+            _data.canvas.width = _canvas.get().width;
+            _data.canvas.height = _canvas.get().height;
+        }
+    }
+
+    var init = function(updatesPerSecond, updateFunction, renderFunction) {
+        _this = this;
+
         updatesPerSecond = updatesPerSecond !== undefined ? updatesPerSecond : 30;
+        updateFunction = updateFunction !== undefined ? updateFunction : function(){};
+        renderFunction = renderFunction !== undefined ? renderFunction : function(){};
+
+        _this.render = renderFunction;
+        _this.update = updateFunction;
+
         _updatesPerSecond = updatesPerSecond;
         _stepInterval = 1000 / _updatesPerSecond;
+        update(_data);
         updateNextStep();
 
         setInterval(main,0);
@@ -118,6 +151,11 @@ var Loop = (function() {
         return sum/_fpsRegister.length*_updatesPerSecond;
     }
 
+    var setUpdateRate = function(rate) {
+        _updatesPerSecond = rate;
+        _stepInterval = 1000 / _updatesPerSecond;
+    }
+
     return {
         "init"          : init,
         "draw"          : draw,
@@ -128,7 +166,8 @@ var Loop = (function() {
         "pause"         : pause,
         "unpase"        : unpause,
         "togglePause"   : togglePause,
-        "getFrameRate"  : getFrameRate
+        "getFrameRate"  : getFrameRate,
+        "setUpdateRate" : setUpdateRate
     }
 
 })();

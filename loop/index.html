@@ -14,18 +14,43 @@
 
     <canvas id="canvas" class="fullscreen"></canvas>
     
+    <div id="hud">
+        <div class="bottom-right">
+            <script type="text/javascript">
+                var formAction_regenerateGrid = function(form) {
+                    Loop.setUpdateRate(form.elements.updateRate.value);
+                }
+            </script>
+            Update Rate: <span id="loopUdateRate"></span><br/>
+            Frame Rate: <span id="loopFrameRate"></span><br/>
+            <br/>
+            <form action="javascript:void(0);" onsubmit="formAction_regenerateGrid(this);">
+                <label id="form-regenerate" for="updateRate">Update Rate:</label> <br/>
+                <input name="updateRate" type="number"/><br/>
+                <input type="submit" value="Update!" />
+            </form>
+        </div>
+    </div>
+
     <script src="../js/color.js" type="text/javascript"></script>
+    <script src="../js/draw.js" type="text/javascript"></script>
     <script src="../js/canvas.js" type="text/javascript"></script>
     <script src="../js/loop.js" type="text/javascript"></script>
     <script type="text/javascript">
+        var update = function(data) {
+            data.randColor = Color.random();
+        }
+
+        var render = function(context, data) {
+            context.fillStyle = data.randColor;
+            context.fillRect(0, 0, data.canvas.width, data.canvas.height);
+        }
+
         document.addEventListener(
             'DOMContentLoaded', 
             function() {
-                // var body = document.getElementsByTagName('body')[0];
-                // body.height = window.innerHeight;
-                // body.width = window.innerWidth;
                 Canvas.init('canvas');
-                Loop.init(1);
+                Loop.init(1, update, render);
                 Loop.attach(Canvas);
                 Canvas.resize();
             }, 
