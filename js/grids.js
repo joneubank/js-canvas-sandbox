@@ -1,3 +1,9 @@
+/*************************************
+ How to Use
+
+canvas = Grids(canvas);
+canvas.draw = canvas.grids.draw;
+*************************************/
 var Grids = function(canvas) {
     var grids = {};
 
@@ -33,27 +39,13 @@ var Grids = function(canvas) {
     }
 
     grids.calculateGridWidth = function() {
-        // if (canvas) {
-            return ((canvas._elem.width / grids._tileSize)|0)+1;
-        // } else {
-        //     return 100;
-        // }
+        return ((canvas._elem.width / grids._tileSize)|0)+1;
     }
 
     grids.calculateGridHeight = function() {
-        // if(canvas) {
         return ((canvas._elem.height / grids._tileSize)|0)+1;
-        // } else {
-            // return 100;
-        // }
     }
     
-    // grids.setTileSize = function(size) {
-    //     if(size) {
-    //         _tileSize = size;
-    //     }
-    // }
-
     grids.randomColorGrid = function(width, height) {
         var grid = [];
 
@@ -73,37 +65,10 @@ var Grids = function(canvas) {
         return grid;
     }
 
-    // var attach = function(canvas) {
-    //     canvas.draw = draw;
-    //     _canvas = canvas;
-    // }
-
     /***************
         Init Code 
      **************/
-    // this.setTileSize(tileSize);
-	// this.regenerate(gridSize);
-
-    // canvas.draw = grids.draw;
     grids.regenerate();
     canvas.grids = grids;
     return canvas;
-
-    // return {
-  //       "init"           : init,
-  //       "attach"     : attach,
-
-  //       "regenerate"    : regenerate,
-  //       "setTileSize"   : setTileSize
-  //   }
-
 };
-
-// document.addEventListener(
-// 	    'DOMContentLoaded', 
-// 	    function() {
-// 	        Grids.init(125);
-// 	        Grids.attach(Canvas);
-// 	    }, 
-// 	    false
-// 	);
