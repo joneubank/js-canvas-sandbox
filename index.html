@@ -10,57 +10,90 @@
     <!--[if lt IE 9]><script src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
 </head>
 <body>
+    <div class="fixed-fullscreen">
+        <canvas id="canvas" ></canvas>
+    </div>
+
     <div id="hud">
 
         <nav>
         <div class="top-left">
             <h1>Canvas Sandbox Projects</h1>
-            <a href="grids">Grids</a>    
+            <ul>
+            <li>
+                <a href="grids">Random Color Grids</a>
+            </li>
+            <li>
+                <a href="loop">Update/Render Loop</a>
+            </li>
         </div>
         </nav>
 
-        <div class="bottom-right nomax">
+        <div class="bottom-right">
                 <h2>Example Canvas Library Use</h2>
-                <pre><code>&lt;canvas id="canvas">&lt;/canvas>
-
+                <pre><code>
 &lt;script src="js/canvas.js" type="text/javascript">&lt;/script>
+&lt;script src="js/color.js" type="text/javascript">&lt;/script>
 &lt;script type="text/javascript">
-    document.addEventListener(
-        'DOMContentLoaded', 
-        function() {
-            //Initialize our canvas code
-            Canvas.init('canvas');
-
-            //Call a JS module that will run on the canvas, using Grids as an example
-            Grids.init(250);
-            Grids.attach(Canvas);
-            
-            //Call resize to force resize, consequently drawing the module just attached
-            Canvas.resize();            
-        }, 
-        false
-    );
+    var canvas;
+    canvas = Canvas('canvas');
+    canvas.draw = function(context, canvas) {
+        //fill Background with random color (random chosen on every draw)
+        context.fillStyle = Color.random();
+        context.fillRect(0,0, canvas._elem.width, canvas._elem.height);    
+    }
+    canvas.resize();
 &lt;/script></code></pre>
         </div>  
     </div>
 
-    <canvas id="canvas"></canvas>
-
     <script src="js/canvas.js" type="text/javascript"></script>
-    <script src="js/grids.js" type="text/javascript"></script>
+    <script src="js/color.js" type="text/javascript"></script>
     <script type="text/javascript">
-        document.addEventListener(
-            'DOMContentLoaded', 
-            function() {
-                Canvas.init('canvas');
+        var canvas;
+        canvas = Canvas('canvas');
+        canvas.draw = function(context, canvas) {
+            //Background Fill
+            var fill = Color.random();
+            var w = canvas._elem.width;
+            var h = canvas._elem.height;
 
-                Grids.init(250);
-                Grids.attach(Canvas);
+            context.fillStyle = fill;
+            context.fillRect(0,0, canvas._elem.width, canvas._elem.height);
 
-                Canvas.resize();            
-            }, 
-            false
-        );
+            //Draw "Jno" in inverted color
+            context.fillStyle = Color.invert(fill);
+            var letterHeightPercent = 0.5;
+            var letterTop = h*0.25;
+            var letterHeight = h*0.5;
+            var letterSpaces = 5;
+            var letterGap = w*0.01;
+            var letterWidth = w/letterSpaces-(letterGap/2)*(letterSpaces-1);
+            var strokeThickness = 0.05 * (w < h ? w : h);
+            var shortLetterTop = letterTop + letterHeight/2;
+
+            //letter 1 = J
+            var l1left = letterWidth*1+letterGap*1; 
+            context.fillRect(l1left, letterTop, letterWidth, strokeThickness);//top
+            context.fillRect(l1left+letterWidth/2, letterTop, strokeThickness, letterHeight);//center
+            context.fillRect(l1left, letterTop+letterHeight-strokeThickness, letterWidth/2 + 1, strokeThickness);//bottom
+            context.fillRect(l1left, letterTop+letterHeight/2, strokeThickness, letterHeight/2);
+
+            //letter 2 = N
+            var l2left = letterWidth*2+letterGap*2;
+            context.fillRect(l2left, shortLetterTop, strokeThickness, letterHeight/2);//left
+            context.fillRect(l2left, shortLetterTop, letterWidth, strokeThickness);//top
+            context.fillRect(l2left+letterWidth-strokeThickness, shortLetterTop, strokeThickness, letterHeight/2);//right
+
+            //letter 3 = 0
+            var l3left = letterWidth*3+letterGap*3;
+            context.fillRect(l3left, shortLetterTop, strokeThickness, letterHeight/2);//left
+            context.fillRect(l3left, shortLetterTop, letterWidth, strokeThickness);//top
+            context.fillRect(l3left+letterWidth-strokeThickness, shortLetterTop, strokeThickness, letterHeight/2);//right
+            context.fillRect(l3left, shortLetterTop+letterHeight/2-strokeThickness, letterWidth, strokeThickness);//top
+        }
+        canvas.resize();
+
     </script>
 </body>
 </html>
