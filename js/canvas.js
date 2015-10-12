@@ -1,64 +1,64 @@
 var Canvas = function(canvasId, resizeListenerOn) {
     resizeListenerOn = resizeListenerOn !== undefined ? resizeListenerOn : true;
 
-    var ob = {};//ob is short for object
+    var canvas = {};
 
-    ob._elem  = null;
-    ob._context = null;
+    canvas._elem  = null;
+    canvas._context = null;
 
-    ob._resizeListener = resizeListenerOn;
+    canvas._resizeListener = resizeListenerOn;
 
-    ob.draw = function(context, canvas) { }
+    canvas.draw = function(context, canvas) { }
 
-    ob.redraw = function() 
+    canvas.redraw = function() 
     {
-        ob._context.clearRect(0,0,ob._elem.width,ob._elem.height);
-        ob.draw(ob._context, ob);
+        canvas._context.clearRect(0,0,canvas._elem.width,canvas._elem.height);
+        canvas.draw(canvas._context, canvas);
     }
 
-    ob.resize = function() 
+    canvas.resize = function() 
     {
-        ob._elem.width = ob._elem.parentElement.offsetWidth;
-        ob._elem.height = ob._elem.parentElement.offsetHeight;
-        ob.redraw();
+        canvas._elem.width = canvas._elem.parentElement.offsetWidth;
+        canvas._elem.height = canvas._elem.parentElement.offsetHeight;
+        canvas.redraw();
     }
 
     //TODO: Remove this since the draw method will be publicly accessible now
-    ob.setDrawer = function(drawMethod) {
-        ob.draw = drawMethod;
+    canvas.setDrawer = function(drawMethod) {
+        canvas.draw = drawMethod;
     }
 
     //TODO: hud interactions (keystrokes to show/hide, make collapsable)
-    ob._setupHud = function() {
+    canvas._setupHud = function() {
         // document.getElementById("hud").getElementsByClass("");
     }
 
 
     //TODO: Remove this since the canvas member will be publicly accessible now
-    ob.getElement = function() {
-        return ob._elem;
+    canvas.getElement = function() {
+        return canvas._elem;
     }
 
     /***************
         Init Code 
      **************/
-    ob._elem = document.getElementById(canvasId);
-    ob._context = ob._elem.getContext('2d');
+    canvas._elem = document.getElementById(canvasId);
+    canvas._context = canvas._elem.getContext('2d');
 
     //Register resize event listener
     window.addEventListener('resize', function() 
     {
-        if(ob._resizeListener) 
+        if(canvas._resizeListener) 
         {
-            ob.resize();
+            canvas.resize();
         }
     },
     false);
-    ob.resize();
+    canvas.resize();
     
     // _setupHud();
     
-    return ob;
+    return canvas;
 };
 
 

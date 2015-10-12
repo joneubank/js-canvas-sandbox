@@ -1,72 +1,71 @@
-var Grids = (function() {
+var Grids = function(canvas) {
+    var grids = {};
 
-    var _canvas = null;
+	grids._data = null;
+    grids._tileSize = 100;
 
-	var _grid = null;
-    var _tileSize = 10;
-
-	var draw = function(context) {
-        if(_grid) {
-		  drawQuadGrid(context, _grid, _tileSize, _tileSize);
+	grids.draw = function(context) {
+        if(grids._data) {
+		  grids.drawQuadGrid(context, grids._data, grids._tileSize, grids._tileSize);
         }
 	}
 
-	var drawQuad = function (context, left, top, width, height, color) {
+	grids.drawQuad = function (context, left, top, width, height, color) {
         color = typeof color !== undefined ? color : "#ffffff";
         context.fillStyle=color;
         context.fillRect(left, top, width, height);
     }
 
-	var drawQuadGrid = function(context, grid, width, height) {
+	grids.drawQuadGrid = function(context, grid, width, height) {
         for (xindex = 0; xindex < grid.length; xindex++) {
             var col = grid[xindex];
             for(yindex = 0; yindex < col.length; yindex++){
-                drawQuad(context, width*xindex, height*yindex, width, height, col[yindex]);
+                grids.drawQuad(context, width*xindex, height*yindex, width, height, col[yindex]);
             }
         }
     }
 
-    var regenerate = function(gridWidth, gridHeight) {
-        gridWidth = typeof gridWidth !== 'undefined' ? gridWidth : calculateGridWidth();
-        gridHeight = typeof gridHeight !== 'undefined' ? gridHeight : calculateGridHeight();
+    grids.regenerate = function(gridWidth, gridHeight) {
+        gridWidth = typeof gridWidth !== 'undefined' ? gridWidth : grids.calculateGridWidth();
+        gridHeight = typeof gridHeight !== 'undefined' ? gridHeight : grids.calculateGridHeight();
 
-        _grid = randomColorGrid(gridWidth, gridHeight);
+        grids._data = grids.randomColorGrid(gridWidth, gridHeight);
     }
 
-    var calculateGridWidth = function() {
-        if (_canvas) {
-            return ((_canvas.get().width / _tileSize)|0)+1;
-        } else {
-            return 100;
-        }
+    grids.calculateGridWidth = function() {
+        // if (canvas) {
+            return ((canvas._elem.width / grids._tileSize)|0)+1;
+        // } else {
+        //     return 100;
+        // }
     }
 
-    var calculateGridHeight = function() {
-        if(_canvas) {
-            return ((_canvas.get().height / _tileSize)|0)+1;
-        } else {
-            return 100;
-        }
+    grids.calculateGridHeight = function() {
+        // if(canvas) {
+        return ((canvas._elem.height / grids._tileSize)|0)+1;
+        // } else {
+            // return 100;
+        // }
     }
     
-    var setTileSize = function(size) {
-        if(size) {
-            _tileSize = size;
-        }
-    }
+    // grids.setTileSize = function(size) {
+    //     if(size) {
+    //         _tileSize = size;
+    //     }
+    // }
 
-
-    var randColor = function () {
-        return "#"+("000000" + ((1<<24)*Math.random()|0).toString(16)).substr(-6);
-    }
-
-    var randomColorGrid = function(width, height) {
+    grids.randomColorGrid = function(width, height) {
         var grid = [];
 
         for (xindex = 0; xindex < width; xindex++) {
             var col = [];
             for(yindex = 0; yindex < height; yindex++){
-                col[yindex] = randColor();
+                if(Color) 
+                {
+                    col[yindex] = Color.random();
+                } else {
+                    col[yindex] = "#fff";
+                }
             }
             grid[xindex] = col;
         }
@@ -74,28 +73,31 @@ var Grids = (function() {
         return grid;
     }
 
+    // var attach = function(canvas) {
+    //     canvas.draw = draw;
+    //     _canvas = canvas;
+    // }
 
-    var init = function(tileSize, gridSize) {
-        this.setTileSize(tileSize);
-    	this.regenerate(gridSize);
-    }
+    /***************
+        Init Code 
+     **************/
+    // this.setTileSize(tileSize);
+	// this.regenerate(gridSize);
 
+    // canvas.draw = grids.draw;
+    grids.regenerate();
+    canvas.grids = grids;
+    return canvas;
 
-    var attach = function(canvas) {
-    	canvas.draw = draw;
-        _canvas = canvas;
-    }
+    // return {
+  //       "init"           : init,
+  //       "attach"     : attach,
 
+  //       "regenerate"    : regenerate,
+  //       "setTileSize"   : setTileSize
+  //   }
 
- 	return {
-        "init"			: init,
-        "attach"		: attach,
-
-        "regenerate"    : regenerate,
-        "setTileSize"   : setTileSize
-    }
-
-})();
+};
 
 // document.addEventListener(
 // 	    'DOMContentLoaded', 
