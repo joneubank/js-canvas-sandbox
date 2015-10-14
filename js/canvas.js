@@ -1,3 +1,31 @@
+var Shapes = function(canvas) {
+    var shape = {};
+
+    shape.circle = function (radius, posx, posy, fill) {
+        var circle = {};
+        circle.radius = radius;
+        circle.x = posx;
+        circle.y = posy;
+        circle.fill = fill;
+        circle.draw = function (context, offx, offy, zoom) 
+        {
+            offx = offx !== undefined ? offx : 0;
+            offy = offy !== undefined ? offy : 0;
+            zoom = zoom !== undefined ? zoom : 1;
+
+            context.beginPath();
+            context.arc(circle.x+offx, circle.y + offy, circle.radius*zoom, 0, 2 * Math.PI, false);
+            context.fillStyle = circle.fill;
+            context.fill();
+        }
+        return circle;
+    };
+
+    canvas.shapes = shape;
+
+    return canvas;
+}
+
 var Canvas = function(canvasId, resizeListenerOn) {
     resizeListenerOn = resizeListenerOn !== undefined ? resizeListenerOn : true;
 
@@ -30,6 +58,7 @@ var Canvas = function(canvasId, resizeListenerOn) {
         // document.getElementById("hud").getElementsByClass("");
     }
 
+    Shapes(canvas);
 
     /***************
         Init Code 

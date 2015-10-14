@@ -44,12 +44,23 @@
 
         canvas = Canvas('canvas');
         canvas = Loop(canvas);
+
+        canvas.data.loopdemo = {};
+        canvas.data.loopdemo.color = Color.random();
+        canvas.data.loopdemo.ball = canvas.shapes.circle(50, canvas._elem.width/2, canvas._elem.height/2, Color.invert(canvas.data.loopdemo.color));
+
         canvas.draw = function(context, canvas) {
-            context.fillStyle = canvas.data.randColor;
+            context.fillStyle = canvas.data.loopdemo.color;
             context.fillRect(0, 0, canvas._elem.width, canvas._elem.height);
+            canvas.data.loopdemo.ball.draw(context, 0, 0, 1);
         }
+
         canvas.loop.update = function(canvas) {
-            canvas.data.randColor = Color.random();
+            //Update loopdemo data
+            canvas.data.loopdemo.color = Color.random();
+            canvas.data.loopdemo.ball.fill = Color.invert(canvas.data.loopdemo.color);
+
+            //Update HUD
             document.getElementById('loopUpdateRate').innerHTML = canvas.loop.updateRate()|0;
             document.getElementById('loopFrameRate').innerHTML = canvas.loop.fps()|1;
         }
