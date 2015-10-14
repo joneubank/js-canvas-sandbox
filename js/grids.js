@@ -10,7 +10,7 @@ var Grids = function(canvas) {
 	grids._data = [];
     grids._tileSize = 100;
 
-	grids.draw = function(context) {
+	grids.draw = function(context, canvas) {
         if(grids._data) {
 		  grids.drawQuadGrid(context, grids._data, grids._tileSize, grids._tileSize);
         }
