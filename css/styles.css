@@ -111,6 +111,10 @@
     #hud form label {
       font-weight: bold;
     }
+
+    .hud-label {
+      font-weight: bold;
+    }
     
 /* ---------------------------------------------------------
    Print styles

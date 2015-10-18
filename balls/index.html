@@ -20,11 +20,12 @@
         <div class="bottom-right">
             <script type="text/javascript">
                 var formAction_addBall = function(form) {
-                    canvas.balls._list.push(canvas.balls.create());
+                    canvas.balls.add(5);
                 }
             </script>
-            Update Rate: <span id="loopUpdateRate"></span><br/>
-            Frame Rate: <span id="loopFrameRate"></span><br/>
+            <span class="hud-label">Update Rate:</span> <span id="loopUpdateRate"></span><br/>
+            <span class="hud-label">Frame Rate:</span> <span id="loopFrameRate"></span><br/>
+            <span class="hud-label">Balls:</span> <span id="numberOfBalls"></span>
             <br/>
             <form action="javascript:void(0);" onsubmit="formAction_addBall(this);">
                 <input type="submit" value="Add!" />
@@ -37,17 +38,24 @@
     <script src="balls.js" type="text/javascript"></script>
     <script type="text/javascript">
 
+        var hud = {};
+        hud.updateRate = document.getElementById('loopUpdateRate');
+        hud.frameRate = document.getElementById('loopFrameRate');
+        hud.ballCount = document.getElementById('numberOfBalls');
+
         canvas = Canvas('canvas');
         canvas = Loop(canvas);
         canvas = Balls(canvas);
-        canvas.balls.add(10);
+        canvas.balls.add(20);
 
         canvas.draw = canvas.balls.draw;
+        canvas.loop._stepInterval = 1000/60;
         canvas.loop.update = function(canvas) 
         {
             canvas.balls.update(canvas);
-            document.getElementById('loopUpdateRate').innerHTML = Math.round(1000 / canvas.loop._stepInterval);
-            document.getElementById('loopFrameRate').innerHTML = canvas.loop.fps()|0;
+            hud.updateRate.innerHTML = Math.round(1000 / canvas.loop._stepInterval);
+            hud.frameRate.innerHTML = canvas.loop.fps()|0;
+            hud.ballCount.innerHTML = canvas.balls._list.length;
         }
 
         canvas.loop.start();

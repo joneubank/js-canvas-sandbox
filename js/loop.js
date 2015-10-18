@@ -43,12 +43,13 @@ var Loop = function(canvas) {
                 }
                 loop._fpsRegister.push(loop._drawsThisStep);
                 loop._drawsThisStep = 0;
+                
+
             }
         }
 
         //draw as often as possible
         canvas.redraw();
-
         loop._drawsThisStep = loop._drawsThisStep + 1;
     }
 

@@ -4,13 +4,18 @@ var Balls = function(canvas) {
     balls._list = [];
     balls.random = {};
     balls.random.minRad = 10;
-    balls.random.maxRad = 100;
+    balls.random.maxRad = 150;
     balls.random.minVel = 50;
-    balls.random.maxVel = 250;
+    balls.random.maxVel = 1000;
+
+    balls.random.radius = function() {
+        var sqrtRad = Math.random()*(Math.sqrt(balls.random.maxRad-balls.random.minRad));
+        return (sqrtRad*sqrtRad)|0+balls.random.minRad;
+    }
 
     balls.create = function(radius, posx, posy, velx, vely, color) 
     {
-        radius = radius !== undefined ? radius : (Math.random()*(balls.random.maxRad-balls.random.minRad))|0 + balls.random.minRad;
+        radius = radius !== undefined ? radius : balls.random.radius();
         velx = velx !== undefined ? velx : (Math.random()*(balls.random.maxVel-balls.random.minVel)|0 + balls.random.minVel)*(Math.round(Math.random()) ? 1 : -1);
         vely = vely !== undefined ? vely : (Math.random()*(balls.random.maxVel-balls.random.minVel)|0 + balls.random.minVel)*(Math.round(Math.random()) ? 1 : -1);
         posx = posx !== undefined ? posx : Math.random()*(canvas._elem.width-radius*2)+radius;
