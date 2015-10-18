@@ -2,9 +2,10 @@
 
 Project for experimental/test code for HTML5 Canvas drawing and JavaScript Controllers.
 
-## Live Links
+**DISCLAIMER: README is out of date wrt description of code.**
+
+## Live Link
 * [Canvas Sandbox Home](http://joneubank.com/things/canvas)
-* [Colour Grids](http://joneubank.com/things/canvas/grids)
 
 ## Canvas.js
 The Canvas is the central focus of this project. The canvas object should be included first and subsequent modules that intend to draw to it should attach themselves to it.
