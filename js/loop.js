@@ -6,7 +6,7 @@ var Loop = function(canvas) {
 
     //loop handling
     loop._count = 0;
-    loop._stepInterval = 1000 / 30;
+    loop._stepInterval = 1000 / 60;
     loop._drawsThisStep = 0;
     loop._fpsRegister = [];
     loop._fpsRegisterMaxLength = 1000;
@@ -16,13 +16,13 @@ var Loop = function(canvas) {
     }
     
     /*
-    * _update(canvas) has the default functionality
-    * update(canvas) is blank by default and should be overwritten by whatever logic the user wants the loop to execute
+    * _update(canvas, loop) has the default functionality
+    * update(canvas, loop) is blank by default and should be overwritten by whatever logic the user wants the loop to execute
     */
-    loop.update = function(canvas) { }
-    loop._update = function(canvas) {
+    loop.update = function(canvas, loop) { }
+    loop._update = function(canvas, loop) {
         loop._count = loop._count + 1;
-        loop.update(canvas);
+        loop.update(canvas, loop);
     }
 
     loop.main = function() {
@@ -33,7 +33,7 @@ var Loop = function(canvas) {
             if(timeNow >= loop._nextStepTime) {
                 
                 loopTime = timeNow - loop._nextStepTime;
-                loop._update(canvas);
+                loop._update(canvas, loop);
 
                 //update time to run loop at next
                 loop.updateNextStep();

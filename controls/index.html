@@ -16,25 +16,21 @@
 
     <script src="../js/canvas.js" type="text/javascript"></script>
     <script src="../js/loop.js" type="text/javascript"></script>
+    <script src="../js/control.js" type="text/javascript"></script>
+    <script src="stuff.js" type="text/javascript"></script>
     <script type="text/javascript">
         
         var canvas = Canvas('canvas');
-        Loop(canvas);
-
         canvas.resize();
+        
+        Control(canvas);
+        
+        Stuff(canvas, canvas.control);
 
-        canvas.data = {};
-        canvas.data.player = {};
-        canvas.data.player.circle = Shapes.circle(50, canvas._elem.width/2-25, canvas._elem.height/2-25, Color.random());
-
-        canvas.loop.update = function(canvas) 
-        {
-        }
-
-        canvas.draw = function(context, canvas) {
-            canvas.data.player.circle.draw(context);
-        }
-
+        canvas.draw = canvas.stuff.draw;
+        
+        Loop(canvas);
+        canvas.loop.update = canvas.stuff.update;
         canvas.loop.start();
 
     </script>
