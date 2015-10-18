@@ -1,8 +1,10 @@
+**DISCLAIMER: README is out of date wrt description of code.**
+
+
 # Sandbox: Canvas and JS
 
 Project for experimental/test code for HTML5 Canvas drawing and JavaScript Controllers.
 
-**DISCLAIMER: README is out of date wrt description of code.**
 
 ## Live Link
 * [Canvas Sandbox Home](http://joneubank.com/things/canvas)
