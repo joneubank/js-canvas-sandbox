@@ -44,7 +44,7 @@ var Loop = function(canvas) {
                 loop._fpsRegister.push(loop._drawsThisStep);
                 loop._drawsThisStep = 0;
                 
-
+                
             }
         }
 
@@ -57,7 +57,7 @@ var Loop = function(canvas) {
     * Runs the main loop until told to stop
     */
     loop.start = function() {
-        setInterval(loop.main,0);
+        loop._intervalRef = setInterval(loop.main,0);
     }
 
     /*
@@ -65,7 +65,7 @@ var Loop = function(canvas) {
     * Sets a property that indicates to the main loop to exit
     */
     loop.stop = function() {
-        loop._exit = true;
+        clearInterval(loop._intervalRef);
     }
 
     /*
@@ -95,7 +95,7 @@ var Loop = function(canvas) {
 
     loop.updateRate = function()
     {
-        return 1000 / canvas.loop._stepInterval;
+        return 1000 / loop._stepInterval;
     }
 
     loop.fps = function() {
