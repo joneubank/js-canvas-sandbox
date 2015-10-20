@@ -64,6 +64,15 @@ var Shapes = {
     }
 }
 
+var Util = {
+    "circToCart" : function (radians, radius) {
+        return {
+            "x" : radius * Math.cos(radians),
+            "y" : radius * Math.sin(radians)
+        };
+    }
+}
+
 var Canvas = function(canvasId, resizeListenerOn) {
     resizeListenerOn = resizeListenerOn !== undefined ? resizeListenerOn : true;
 

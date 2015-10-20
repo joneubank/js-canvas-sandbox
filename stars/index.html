@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  
+    <title>Stars | Canvas Sandbox</title>
+    <meta name="description" content="JS Canvas Dev Sandbox">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/normalize.css" rel="stylesheet" media="all">
+    <link href="../css/styles.css" rel="stylesheet" media="all">
+    <!--[if lt IE 9]><script src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+</head>
+<body>
+
+    <div class="fixed-fullscreen">
+        <canvas id="canvas"></canvas>
+    </div>
+    
+    <script src="../js/canvas.js" type="text/javascript"></script>
+    <script src="../js/loop.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function Star(startDistance) {
+            startDistance = startDistance !== undefined ? startDistance : 0;
+
+            this.angle = Math.random()*2*Math.PI;
+            this.distance = startDistance;
+            this.coords = {
+                "x":0,
+                "y":0
+            }
+
+            this.draw = function(context, canvas)
+            {
+                context.fillStyle="#ffffff";
+                context.fillRect(canvas._elem.width/2 + this.coords.x-1, canvas._elem.height/2 + this.coords.y-1, 2, 2);                
+            }
+
+            this.update = function(canvas, loop)
+            {
+                this.distance = this.distance + canvas.stars.starSpeed*loop._stepInterval/1000;
+                this.coords = Util.circToCart(this.angle, this.distance);
+            }
+        }
+
+        canvas = Canvas('canvas');
+        canvas = Loop(canvas);
+
+        canvas.stars = {};
+        canvas.stars.starSpeed = 600;
+        canvas.stars._list = [];
+        canvas.stars.maxCreateDistance = 200;
+        startingNum = 100;
+        canvas.stars.generatedPerSec = 40;
+
+        for(i = 0; i < startingNum; i++)
+        {
+            var screenRad = Math.sqrt(canvas._elem.width*canvas._elem.width + canvas._elem.height + canvas._elem.height)/2;
+            canvas.stars._list.push(new Star(Math.random()*screenRad));
+        }
+
+        function addStar(distance, num) {
+            num = num !== undefined ? num : 1;
+            for(i = 0; i < num; i++)
+            {
+                var index = canvas.stars._list.lastIndexOf(undefined);
+                if(index == -1) {
+                    index = canvas.stars._list.length;
+                }
+                canvas.stars._list[index] = new Star(distance);
+            }
+        }
+
+
+        canvas.draw = function(context, canvas) 
+        {
+            for(i = 0; i < canvas.stars._list.length; i++)
+            {
+                var star = canvas.stars._list[i];
+                if(star){
+                    star.draw(context, canvas);
+                }
+            }
+        }
+
+        canvas.loop.update = function(canvas, loop) 
+        {
+            var screenRad = Math.sqrt(canvas._elem.width*canvas._elem.width + canvas._elem.height + canvas._elem.height)/1.5;
+ 
+            var chance = loop._stepInterval / 1000 * canvas.stars.generatedPerSec;
+            if(Math.random() < chance) {
+                addStar(Math.random()*canvas.stars.maxCreateDistance);
+            }
+
+            for(i = 0; i < canvas.stars._list.length; i++)
+            {
+                var star = canvas.stars._list[i];
+                if (star)
+                {
+                    star.update(canvas, loop);
+                    if(star.distance > screenRad) {
+                        canvas.stars._list[i] = undefined;
+                    }    
+                }
+            }
+        }
+
+
+
+        canvas.loop.start();
+    </script>
+</body>
+</html>
