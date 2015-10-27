@@ -22,7 +22,7 @@
         function Star(startDistance) {
             startDistance = startDistance !== undefined ? startDistance : 0;
 
-            this.size = Math.random()*3+2;
+            this.size = Math.random()*10+2;
             this.color = Color.random();
             this.angle = Math.random()*2*Math.PI;
             this.distance = startDistance;
@@ -50,9 +50,9 @@
         canvas.stars = {};
         canvas.stars.starSpeed = 600;
         canvas.stars._list = [];
-        canvas.stars.maxCreateDistance = 200;
+        canvas.stars.maxCreateDistance = 500;
         startingNum = 100;
-        canvas.stars.generatedPerSec = 40;
+        canvas.stars.generatedPerSec = 60;
 
         for(i = 0; i < startingNum; i++)
         {

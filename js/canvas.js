@@ -65,12 +65,39 @@ var Shapes = {
 }
 
 var Util = {
-    "circToCart" : function (radians, radius) {
+    "circToCart" : function (radians, radius) 
+    {
         return {
             "x" : radius * Math.cos(radians),
             "y" : radius * Math.sin(radians)
         };
+    },
+
+    "cleanList" : function(originalList)
+    {
+        var output = [];
+        for(var i = 0; i < originalList.length; i++)
+        {
+            if(originalList[i])
+            {
+                output.push(originalList[i]);
+            }
+        }
+        return output;
+    },
+
+    "drawList" : function(list, context, canvas)
+    {
+        for (var i = 0; i < list.length; i++)
+        {
+            var object = list[i];
+            if (object)
+            {
+                object.draw(context, canvas);
+            }
+        }
     }
+
 }
 
 var Canvas = function(canvasId, resizeListenerOn) {
@@ -126,6 +153,7 @@ var Canvas = function(canvasId, resizeListenerOn) {
     
     return canvas;
 };
+
 
 
 

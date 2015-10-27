@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">  
-    <title>'Sploding Particle Systems | Canvas Sandbox</title>
+    <meta charset="utf-8">
+    <title>Kabloomy! 'Splodin Particle Systems | Canvas Sandbox</title>
     <meta name="description" content="JS Canvas Dev Sandbox">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../css/normalize.css" rel="stylesheet" media="all">
@@ -24,7 +24,7 @@
             </script>
             <span class="hud-label">Update Rate:</span> <span id="loopUpdateRate"></span><br/>
             <span class="hud-label">Frame Rate:</span> <span id="loopFrameRate"></span><br/>
-            <span class="hud-label">Splosions:</span> <span id="numberOfSplosions"></span>
+            <span class="hud-label">Splosions:</span> <span id="numberOfSplosions"></span><br/>
             <span class="hud-label">Particles:</span> <span id="numberOfParticles"></span>
 
             <br/>
@@ -44,25 +44,38 @@
         hud.frameRate = document.getElementById('loopFrameRate');
         hud.splosionsCount = document.getElementById('numberOfSplosions');
         hud.particlesCount = document.getElementById('numberOfParticles');
+        hud.update = function(canvas, loop)
+        {
+            hud.updateRate.innerHTML = Math.round(1000 / canvas.loop._stepInterval);
+            hud.frameRate.innerHTML = canvas.loop.fps()|0;
+            hud.splosionsCount.innerHTML = canvas.splosions._list.length;
+            
+            //get particle count and assign
+            var particleCount = 0;
+            for(i = 0; i < canvas.splosions._list.length) 
+            {
+                if(canvas.splosions._list[i])
+                {
+                    particleCount = particleCount + canvas.splosions._list[i]._particles.length;    
+                }
+            }
+            hud.particlesCount.innerHTML = particleCount;
+        }
 
+        //Init code
         canvas = Canvas('canvas');
         canvas = Loop(canvas);
         canvas = Splosions(canvas);
         canvas.splosions.add(20);
 
         canvas.draw = canvas.splosions.draw;
+
         canvas.loop._stepInterval = 1000/60;
-        canvas.loop.update = function(canvas) 
+        canvas.loop.update = function(canvas, loop) 
         {
-            canvas.splosions.update(canvas);
-            hud.updateRate.innerHTML = Math.round(1000 / canvas.loop._stepInterval);
-            hud.frameRate.innerHTML = canvas.loop.fps()|0;
-            hud.splosionsCount.innerHTML = canvas.splosions._list.length;
-            var particleCount = 0;
-            for(i = 0; i < canvas.splosions._list.length) {
-                particleCount = particleCount + canvas.splosions._list[i]._particles.length;
-            }
-            hud.particlesCount.innerHTML = particleCount;
+            //custom system update
+            canvas.splosions.update(canvas, loop);
+            hud.update(canvas, loop);
         }
 
         canvas.loop.start();
