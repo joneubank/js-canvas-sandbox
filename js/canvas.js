@@ -43,24 +43,46 @@ var Color =
 
 var Shapes = {
 
-    "circle" : function (radius, posx, posy, fill) {
+    "circle" : function (radius, posx, posy, fill)
+    {
         var circle = {};
         circle.radius = radius;
         circle.x = posx;
         circle.y = posy;
         circle.fill = fill;
-        circle.draw = function (context, canvas, offx, offy, zoom) 
+        circle.draw = function (context, canvas, camera) 
         {
-            offx = offx !== undefined ? offx : 0;
-            offy = offy !== undefined ? offy : 0;
-            zoom = zoom !== undefined ? zoom : 1;
+            camera = camera != undefined ? camera : {};
+            camera.x = camera.x !== undefined ? camera.x : 0;
+            camera.y = camera.y !== undefined ? camera.y : 0;
+            camera.zoom = camera.zoom !== undefined ? camera.zoom : 1;
 
             context.beginPath();
-            context.arc(circle.x+offx, circle.y + offy, circle.radius*zoom, 0, 2 * Math.PI, false);
+            context.arc((circle.x+camera.x)*camera.zoom, (circle.y + camera.y)*camera.zoom, circle.radius*camera.zoom, 0, 2 * Math.PI, false);
             context.fillStyle = circle.fill;
             context.fill();
         }
         return circle;
+    },
+
+    "square" : function(width, posx, posy, fill) 
+    {
+        var square = {};
+        square.width = width;
+        square.x = posx;
+        square.y = posy;
+        square.fill = fill;
+        square.draw = function(context, canvas, camera)
+        {
+            camera = camera != undefined ? camera : {};
+            camera.x = camera.x !== undefined ? camera.x : 0;
+            camera.y = camera.y !== undefined ? camera.y : 0;
+            camera.zoom = camera.zoom !== undefined ? camera.zoom : 1;
+
+            var halfWidth = square.width/2;
+            context.fillStyle = square.fill;
+            context.fillRect( (square.x+camera.x-halfWidth)*camera.zoom, (square.y + camera.y-halfWidth)*camera.zoom, halfWidth*camera.zoom, halfWidth*camera.zoom);
+        }
     }
 }
 
@@ -86,18 +108,76 @@ var Util = {
         return output;
     },
 
-    "drawList" : function(list, context, canvas)
+    "drawList" : function(list, context, canvas, camera)
     {
         for (var i = 0; i < list.length; i++)
         {
             var object = list[i];
             if (object)
             {
-                object.draw(context, canvas);
+                object.draw(context, canvas, camera);
             }
         }
+    },
+
+    "updateList" : function(list, canvas, loop, aliveCheck, clearDead)
+    {
+        aliveCheck = aliveCheck != undefined ? aliveCheck : true;
+        aliveCheck = clearDead != undefined ? clearDead : true;
+
+        for(var i = 0; i < list.length; i++)
+        {
+            var generator = list[i];
+            if(generator)
+            {
+                if (generator.alive || !aliveCheck)
+                {
+                    generator.update(canvas, loop);
+                } else {
+                    if(clearDead) { list[i] = undefined; }
+                }    
+            }
+            
+        }
+    },
+
+    "addToList" : function(list, obj)
+    {
+        var i = list.indexOf(undefined);
+        if(i < 0) {list.push(obj);}
+        else {list[i]=obj;}
+    },
+
+    "randomInt" : function(min, max)
+    {
+        return Math.random()*(max-min)+min;
     }
 
+}
+
+/* ========================
+ * Camera Definition
+ * ===================== */
+function Camera() {}
+Camera.prototype.x = 0;
+Camera.prototype.y = 0;
+Camera.prototype.zoom = 1;
+
+Camera.prototype.multZoom = function(multiplier) 
+{
+    this.zoom *= multiplier;
+}
+
+Camera.prototype.move = function(x, y, relativeToZoom)
+{
+    relativeToZoom = relativeToZoom == undefined ? true : false;
+    
+    this.x = relativeToZoom
+                ? this.x + x/zoom
+                : this.x + x;
+    this.y = relativeToZoom
+                ? this.y + y/zoom
+                : this.y + y;
 }
 
 var Canvas = function(canvasId, resizeListenerOn) {
@@ -111,12 +191,14 @@ var Canvas = function(canvasId, resizeListenerOn) {
 
     canvas._resizeListener = resizeListenerOn;
 
-    canvas.draw = function(context, canvas) { }
+    canvas.camera = new Camera();
+
+    canvas.draw = function(context, canvas, camera) { }
 
     canvas.redraw = function() 
     {
         canvas._context.clearRect(0,0,canvas._elem.width,canvas._elem.height);
-        canvas.draw(canvas._context, canvas);
+        canvas.draw(canvas._context, canvas, canvas.camera);
     }
 
     canvas.resize = function() 

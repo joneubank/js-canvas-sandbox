@@ -11,6 +11,8 @@ var Loop = function(canvas) {
     loop._fpsRegister = [];
     loop._fpsRegisterMaxLength = 1000;
 
+    loop.time = 0;
+
     loop.updateNextStep = function() {
         loop._nextStepTime = (new Date).getTime() + loop._stepInterval;
     }
@@ -32,7 +34,7 @@ var Loop = function(canvas) {
             var timeNow = (new Date).getTime();
             if(timeNow >= loop._nextStepTime) {
                 
-                loopTime = timeNow - loop._nextStepTime;
+                loop.time = timeNow - loop._nextStepTime;
                 loop._update(canvas, loop);
 
                 //update time to run loop at next

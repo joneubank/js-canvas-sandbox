@@ -69,9 +69,9 @@ var Stuff = function(canvas, control) {
 	}
 
 
-    stuff.draw = function(context, canvas)
+    stuff.draw = function(context, canvas, camera)
     {
-    	stuff.circle.draw(context);
+    	stuff.circle.draw(context, canvas, camera);
     }
 
     stuff.update = function(canvas, loop)

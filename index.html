@@ -36,6 +36,8 @@
                 <a href="stars">Stars</a>
             </li>
             <li>
+                <a href="splosions">'Splosions</a>
+            </li>
         </div>
         </nav>
 
@@ -46,7 +48,7 @@
 &lt;script type="text/javascript">
     var canvas;
     canvas = Canvas('canvas');
-    canvas.draw = function(context, canvas) {
+    canvas.draw = function(context, canvas, camera) {
         //fill Background with random color (random chosen on every draw)
         context.fillStyle = Color.random();
         context.fillRect(0,0, canvas._elem.width, canvas._elem.height);    

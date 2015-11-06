@@ -39,12 +39,12 @@ var Balls = function(canvas) {
         }
     }
 
-    balls.draw = function(context, canvas)
+    balls.draw = function(context, canvas, camera)
     {
         //draw each ball
         for(i = 0; i < balls._list.length; i++)
         {
-            balls._list[i].circle.draw(context, canvas);
+            balls._list[i].circle.draw(context, canvas, camera);
         }
     }
 
