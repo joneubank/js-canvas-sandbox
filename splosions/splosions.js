@@ -89,6 +89,27 @@ var Splosions = function(canvas) {
     spl.update = function(canvas, loop) 
     {
         Util.updateList(spl._list, canvas, loop);
+        var splosionCount = 0;
+        var particleCount = 0; 
+        for(i = 0; i < spl._list.length ; i++) 
+        {
+            var generatorHasParticles = false;
+            if(spl._list[i])
+            {
+                for(j = 0; j < spl._list[i]._particles.length; j++) {
+                    if (spl._list[i]._particles[j]) {
+                        particleCount += 1;
+                        generatorHasParticles = true;
+                    }
+                }
+            }
+            if (generatorHasParticles) {
+                splosionCount += 1;
+            }
+        }
+        if (splosionCount == 0) {
+            spl._list = [];
+        }
     }
 
     spl.add = function(num, canvas)
