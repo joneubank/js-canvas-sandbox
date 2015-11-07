@@ -123,16 +123,16 @@ var Util = {
     "updateList" : function(list, canvas, loop, aliveCheck, clearDead)
     {
         aliveCheck = aliveCheck != undefined ? aliveCheck : true;
-        aliveCheck = clearDead != undefined ? clearDead : true;
+        clearDead = clearDead != undefined ? clearDead : true;
 
         for(var i = 0; i < list.length; i++)
         {
-            var generator = list[i];
-            if(generator)
+            var item = list[i];
+            if(item)
             {
-                if (generator.alive || !aliveCheck)
+                if (item.alive || !aliveCheck)
                 {
-                    generator.update(canvas, loop);
+                    item.update(canvas, loop);
                 } else {
                     if(clearDead) { list[i] = undefined; }
                 }    
@@ -151,6 +151,25 @@ var Util = {
     "randomInt" : function(min, max)
     {
         return Math.random()*(max-min)+min;
+    },
+
+    "relativeCoords" :  function (event, elem)
+    {
+        var totalOffsetX = 0;
+        var totalOffsetY = 0;
+        var canvasX = 0;
+        var canvasY = 0;
+
+        do{
+            totalOffsetX += elem.offsetLeft - elem.scrollLeft;
+            totalOffsetY += elem.offsetTop - elem.scrollTop;
+        }
+        while(elem = elem.offsetParent)
+
+        canvasX = event.pageX - totalOffsetX;
+        canvasY = event.pageY - totalOffsetY;
+
+        return {x:canvasX, y:canvasY}
     }
 
 }

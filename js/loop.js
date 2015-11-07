@@ -34,7 +34,7 @@ var Loop = function(canvas) {
             var timeNow = (new Date).getTime();
             if(timeNow >= loop._nextStepTime) {
                 
-                loop.time = timeNow - loop._nextStepTime;
+                loop.time = timeNow - loop._nextStepTime + loop._stepInterval;
                 loop._update(canvas, loop);
 
                 //update time to run loop at next

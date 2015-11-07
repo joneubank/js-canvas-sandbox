@@ -8,13 +8,13 @@ var Splosions = function(canvas) {
     spl.random.maxParticles = 50;
     
     spl.random.minRad = 1;
-    spl.random.maxRad = 3;
+    spl.random.maxRad = 5;
     
-    spl.random.minVel = 500;
+    spl.random.minVel = 0;
     spl.random.maxVel = 1000;
     
-    spl.random.minLife = 200;
-    spl.random.maxLife = 600;
+    spl.random.minLife = 50;
+    spl.random.maxLife = 400;
 
     /* ============================
      *   PARTICLE GENERATOR START
@@ -27,21 +27,30 @@ var Splosions = function(canvas) {
             this._age = 0;
             this._lifespan = Util.randomInt(spl.random.minLife, spl.random.maxLife);
 
-            this.velx = Util.randomInt(spl.random.minVel, spl.random.maxVel);
-            this.vely = Util.randomInt(spl.random.minVel, spl.random.maxVel);
+            var vel = Util.randomInt(spl.random.minVel, spl.random.maxVel);
+            var angle = Math.random()*Math.PI * 2;
 
+
+            this.velx = vel*Math.cos(angle);
+            this.vely = vel*Math.sin(angle);
+            if(Math.random() <= 0.5){
+                this.velx *= -1;
+            }
+            if(Math.random() <= 0.5){
+                this.vely *= -1;
+            }
             var rad = Util.randomInt(spl.random.minRad, spl.random.maxRad);
-            this.shape = Shapes.circle(rad, x, y, "#ffffff");
+            this.shape = Shapes.circle(rad, x, y, Color.random());
 
             this.draw = this.shape.draw;
             this.update = function(canvas, loop)
             {
-                this.age += loop.time;
-                if(this.age > this._lifespan) { this.alive = false; }
+                this._age += loop.time;
+                if(this._age > this._lifespan) { this.alive = false; }
                 else 
                 {
-                    this.shape.x += velx * loop.time/1000;
-                    this.shape.y += vely * loop.time/1000;
+                    this.shape.x += this.velx * loop.time/1000;
+                    this.shape.y += this.vely * loop.time/1000;
                 }
             }
         }
@@ -88,8 +97,13 @@ var Splosions = function(canvas) {
         {
             var x = Math.random()*canvas._elem.width;
             var y = Math.random()*canvas._elem.height;
-            Util.addToList(this._list, new Generator(x,y));
+            spl.addAt(x, y, canvas);
         }
+    }
+
+    spl.addAt = function(x, y, canvas)
+    {
+        Util.addToList(this._list, new Generator(x,y));
     }
 
     canvas.splosions = spl;
