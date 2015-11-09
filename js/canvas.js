@@ -38,12 +38,24 @@ var Color =
         }
 
         return output;
+    },
+
+
+    toRgb: function(hex)
+    {
+        var output = {};
+        output.bigint = parseInt(hex, 16);
+        output.r = (output.bigint >> 16) & 255;
+        output.g = (output.bigint >> 8) & 255;
+        output.b = output.bigint & 255;
+
+        return output;
     }
 }
 
 var Shapes = {
 
-    "circle" : function (radius, posx, posy, fill)
+    circle : function (radius, posx, posy, fill)
     {
         var circle = {};
         circle.radius = radius;
@@ -65,13 +77,14 @@ var Shapes = {
         return circle;
     },
 
-    "square" : function(width, posx, posy, fill) 
+    square : function(width, posx, posy, fill) 
     {
         var square = {};
         square.width = width;
         square.x = posx;
         square.y = posy;
         square.fill = fill;
+        
         square.draw = function(context, canvas, camera)
         {
             camera = camera != undefined ? camera : {};
