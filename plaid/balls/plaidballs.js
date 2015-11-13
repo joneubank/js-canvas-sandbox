@@ -18,15 +18,15 @@ var Balls = function(canvas) {
             var size = Math.random()*(maxStripeSize-minStripeSize) + minStripeSize;
             plaid.addVertical(size, Color.random());
         }
-        plaid.build({width:200, height:200});
+        plaid.build({width:100, height:100});
         return plaid;
     }
 
     var balls = {};
     balls._list = [];
     balls.random = {};
-    balls.random.minRad = 10;
-    balls.random.maxRad = 150;
+    balls.random.minRad = 50;
+    balls.random.maxRad = 200;
     balls.random.minVel = 50;
     balls.random.maxVel = 1000;
 
@@ -90,10 +90,6 @@ var Balls = function(canvas) {
         }
     }
     
-//    balls.add = 
-//        var
-//        balls._list.
-//    }
 
     canvas.balls = balls;
     return canvas;

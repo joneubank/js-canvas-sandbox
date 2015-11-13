@@ -76,7 +76,7 @@ var Shapes = {
             context.save();
             context.beginPath();
             context.translate(xoff, yoff);
-            context.arc(200-xoff, 200-yoff, circle.radius*camera.zoom, 0, 2 * Math.PI, false);
+            context.arc(0, 0, circle.radius*camera.zoom, 0, 2 * Math.PI, false);
             context.fillStyle = circle.fill;
             context.fill();
             context.restore();
