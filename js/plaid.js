@@ -2,10 +2,10 @@
 
 var Plaid = function()
 {
-    var Strip = function(width, color) 
+    var Strip = function(size, color) 
     {
         var strip = {
-            width: width,
+            size: size,
             color: color
         }
         return strip;
@@ -14,23 +14,51 @@ var Plaid = function()
 
     var buildDither = function(plaid, options)
     {
-        pattern = "#ffffff";
+        context.fillStyle = "#ffffff";
+        context.fillRect(0,0,canvas.width, canvas.height);
+
+        var data = context.getImageData9(0, 0, 10, 10);
+
+        for(var i = 0; i < data.length; i++)
+        {
+
+        }
+
+        
     }
 
     var buildBlend = function(plaid, options)
     {   
         context.fillStyle = "#ffffff";
         context.fillRect(0,0,canvas.width, canvas.height);
-        for(var i = 0; i < plaid.h.length; i++){
+        var ypos = 0;
+        for(var i = 0; i < plaid.h.length; i++)
+        {
+            var bandwidth = canvas.height/plaid.getHeight()*plaid.h[i].size;
+            if(i == plaid.h.length-1) 
+            {
+                bandwidth = canvas.height-ypos;
+            }
+
             context.fillStyle = plaid.h[i].color;
-            context.fillRect(0,canvas.height/plaid.h.length*i,canvas.width, canvas.height/plaid.h.length);
+            context.fillRect(0,ypos,canvas.width, bandwidth);
+            ypos += bandwidth;
         }
 
+        var xpos = 0;
         for(var i = 0; i < plaid.v.length; i++){
             var hex = plaid.v[i].color.substring(1);
             var rgb = Color.toRgb(hex);
+
+            var bandwidth = canvas.width/plaid.getWidth()*plaid.v[i].size;
+            if(i == plaid.v.length-1) 
+            {
+                bandwidth = canvas.width-xpos;
+            }
+
             context.fillStyle = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + 0.5 + ")";
-            context.fillRect(canvas.width/plaid.v.length*i,0,canvas.width/plaid.v.length, canvas.height);
+            context.fillRect(xpos, 0, bandwidth, canvas.height);
+            xpos += bandwidth;
         }
         // context.fillStyle = Color.random();
         // context.fillRect(0,canvas.height/2,canvas.width, canvas.height/2);
@@ -46,23 +74,21 @@ var Plaid = function()
         getWidth: function()
         {
             var width = 0;
-            for(i = 0; i < this.h.length; i++)
+            for(var i = 0; i < this.v.length; i++)
             {
-                width += this.h[i].width;
+                width += this.v[i].size;
             }
             return width;
         },
         getHeight: function()
         {
             var height = 0;
-            for(i = 0; i < this.v.length; i++)
+            for(var i = 0; i < this.h.length; i++)
             {
-                height += this.v[i].width;
+                height += this.h[i].size;
             }
             return height;
         },
-
-        pattern: null,
 
         addHorizontal: function(width, color) 
         {
@@ -87,7 +113,7 @@ var Plaid = function()
             options.style = options.style != undefined ? options.style : "blend";
             //If a dimension isn't provided, use a 1:1 scaling based on their ratios defined originally
             options.width = isNaN(options.width) ? this.getWidth() : options.width;
-            options.height = isNaN(options.height) ? this.Height() : options.height;
+            options.height = isNaN(options.height) ? this.getHeight() : options.height;
 
             canvas.width = options.width;
             canvas.height = options.height;

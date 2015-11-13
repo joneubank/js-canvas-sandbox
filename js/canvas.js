@@ -1,6 +1,6 @@
 var Color = 
 {
-    "random" : function() 
+    random: function() 
     {
         return "#"+("000000" + ((1<<24)*Math.random()|0).toString(16)).substr(-6);
     },
@@ -10,7 +10,7 @@ var Color =
     * Returns the inverted color from the value entered in the same format, 
     *   or '#fff' if the input format was wrong or an error occurs
     */
-    "invert" : function(color) {
+    invert: function(color) {
         var output = "#fff";
 
         if(color.length == 7) {
@@ -69,10 +69,17 @@ var Shapes = {
             camera.y = camera.y !== undefined ? camera.y : 0;
             camera.zoom = camera.zoom !== undefined ? camera.zoom : 1;
 
+            var xoff = (circle.x+camera.x)*camera.zoom;
+            var yoff = (circle.y + camera.y)*camera.zoom;
+
+            
+            context.save();
             context.beginPath();
-            context.arc((circle.x+camera.x)*camera.zoom, (circle.y + camera.y)*camera.zoom, circle.radius*camera.zoom, 0, 2 * Math.PI, false);
+            context.translate(xoff, yoff);
+            context.arc(200-xoff, 200-yoff, circle.radius*camera.zoom, 0, 2 * Math.PI, false);
             context.fillStyle = circle.fill;
             context.fill();
+            context.restore();
         }
         return circle;
     },
